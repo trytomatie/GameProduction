@@ -1,0 +1,25 @@
+    using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class MoveableObjectHandler : MonoBehaviour
+{
+    public LayerMask layerMask;
+    private CharacterController cc;
+    public float test;
+    // Start is called before the first frame update
+    void Start()
+    {
+        cc = GetComponent<CharacterController>();
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        RaycastHit raycastHit;
+        if(Physics.Raycast(transform.position, new Vector3(0, -1, 0), out raycastHit, 1.2f, layerMask))
+        {
+            cc.Move(raycastHit.collider.GetComponent<MoveableScript>().movement);
+        }
+    }
+}
