@@ -1,4 +1,4 @@
-    using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -17,7 +17,7 @@ public class MoveableObjectHandler : MonoBehaviour
     void Update()
     {
         RaycastHit raycastHit;
-        if(Physics.Raycast(transform.position, new Vector3(0, -1, 0), out raycastHit, 1.2f, layerMask))
+        if (Physics.Raycast(transform.position + new Vector3(0, 0.5f,0), new Vector3(0, -1, 0), out raycastHit, 4f, layerMask))
         {
             cc.Move(raycastHit.collider.GetComponent<MoveableScript>().movement);
         }
