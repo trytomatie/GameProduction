@@ -40,7 +40,6 @@ public class RacerController : State
     // Start is called before the first frame update
     void Start()
     {
-        stateName = "Controlling";
         anim = GetComponent<Animator>();
         cc = GetComponent<CharacterController>();
         mainCamera = Camera.main;
@@ -139,7 +138,7 @@ public class RacerController : State
     private void CalculateGravity()
     {
         
-        if (!Helper.CheckBeneath(transform.position, cc, layerMask, 0.07f, 1.8f))
+        if (!Helper.CheckBeneath(transform.position, cc, layerMask, 0.09f, 1.8f))
         {
             ySpeed += gravity * Time.deltaTime;
         }
@@ -170,9 +169,9 @@ public class RacerController : State
 
     public override string Transition(GameObject source)
     {
-        if(Input.GetKeyDown(KeyCode.E) && source.GetComponent<GrabHandler>().canGrab)
+        if(Input.GetKeyDown(KeyCode.E) && gameObject.GetComponent<InteractionHandler>().canInteract)
         {
-            return "Grabbing";
+            return "interacting";
         }
         return stateName;
     }

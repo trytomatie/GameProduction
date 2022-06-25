@@ -6,5 +6,10 @@ public class Interactable : MonoBehaviour
 {
     public string interactionName;
     public Vector3 labelOffset;
+
+    public virtual void Interaction()
+    {
+
+    }
 }
 
