@@ -5,7 +5,7 @@ using UnityEngine.Events;
 
 public class Trigger : MonoBehaviour
 {
-
+    
     public UnityEvent triggerEvent;
     // Start is called before the first frame update
     void Start()
@@ -18,4 +18,5 @@ public class Trigger : MonoBehaviour
         triggerEvent.Invoke();
         Destroy(this);
     }
+
 }

@@ -8,6 +8,11 @@ ModelImporter:
     second: Walking
   externalObjects:
   - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Ch09_body
+    second: {fileID: 2100000, guid: 5293f9a9a4b08a74db6c7de9345bc5f1, type: 2}
+  - first:
       type: UnityEngine:Texture2D
       assembly: UnityEngine.CoreModule
       name: Ch09_1001_Diffuse
@@ -78,7 +83,21 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.3331199
+        functionName: TriggerSoundEvent
+        data: Footstep
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
+      - time: 0.7957259
+        functionName: TriggerSoundEvent
+        data: Footstep
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}
