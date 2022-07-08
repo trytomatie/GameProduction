@@ -13,6 +13,7 @@ public class InteractionHandler : State
     public float interactionAngleThreshold = 45;
     public GameObject grabIndicator;
     public Transform itemAnchor;
+    public Transform handIkTarget;
 
     private bool isGrabbing = false;
     // Start is called before the first frame update
@@ -65,10 +66,19 @@ public override void OnStateExit()
 
     public override void EnterState(GameObject source)
     {
-        anim.SetTrigger("grab");
+        if(reachableInteractable.GetComponent<Interactable_Item>() != null)
+        {
+            anim.SetTrigger("grab");
+        }
+        else
+        {
+            anim.SetTrigger("interact");
+        }
+
         grabIndicator.SetActive(false);
         isGrabbing = true;
-        transform.rotation = Quaternion.LookRotation(new Vector3(reachableInteractable.transform.position.x, 0, reachableInteractable.transform.position.z) - new Vector3(transform.position.x, 0, transform.position.z), Vector3.up);
+        handIkTarget.transform.position = reachableInteractable.transform.position + new Vector3(0,0.08f,0);
+        //transform.rotation = Quaternion.LookRotation(new Vector3(reachableInteractable.transform.position.x, 0, reachableInteractable.transform.position.z) - new Vector3(transform.position.x, 0, transform.position.z), Vector3.up);
     }
 
     public override void ExitState(GameObject source)
@@ -100,6 +110,10 @@ public override void OnStateExit()
             isGrabbing = false;
             canInteract = false;
             reachableInteractable.Interaction();
+            if(reachableInteractable.GetComponent<Interactable_Item>() != null)
+            {
+                reachableInteractable.gameObject.SetActive(false);
+            }
         }
     }
 

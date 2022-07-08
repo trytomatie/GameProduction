@@ -29,7 +29,7 @@ public class StateMachine : MonoBehaviour
             {
                 stateName = name;
             }
-            print(stateName);
+            //print(stateName);
         }
         if (state.stateName == stateName)
         {

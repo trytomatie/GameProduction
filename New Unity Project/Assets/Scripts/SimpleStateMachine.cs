@@ -30,7 +30,7 @@ public class SimpleStateMachine : State
             {
                 stateName = name;
             }
-            print(stateName);
+           //  print(stateName);
         }
         if (state.stateName == stateName)
         {
