@@ -5,14 +5,22 @@ using UnityEngine;
 public class Interactable_KeycardPanel : Interactable
 {
     public Animator anim;
+    public Transform ikTarget;
     private void Start()
     {
         interactionName = "Interact";
     }
 
-    public override void Interaction()
+    public override void Interaction(GameObject source)
     {
-        anim.SetTrigger("action");
+        Inventory inventory = source.GetComponent<Inventory>();
+        if(inventory.keys > 0)
+        {
+            inventory.keys--;
+            anim.SetTrigger("action");
+            enabled = false;
+        }
+
     }
 }
 
