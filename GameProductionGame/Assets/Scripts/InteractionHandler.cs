@@ -14,6 +14,7 @@ public class InteractionHandler : State
     public GameObject interactionIndicator;
     public Transform itemAnchor;
     public Transform handIkTarget;
+    public Transform lookIkTarget;
 
     private bool isInteracting = false;
     private Camera mainCamera;
@@ -46,6 +47,14 @@ public class InteractionHandler : State
         }
     }
 
+    public override void UpdateState(GameObject source)
+    {
+        if(reachableInteractable != null)
+        {
+            lookIkTarget.transform.position = reachableInteractable.transform.position;
+        }
+    }
+
 
     public override void EnterState(GameObject source)
     {
@@ -53,6 +62,7 @@ public class InteractionHandler : State
         {
             anim.SetTrigger("grab");
             handIkTarget.transform.position = reachableInteractable.transform.position + new Vector3(0, 0.08f, 0);
+
         }
         else if (reachableInteractable.GetComponent<Interactable_KeycardPanel>() != null)
         {

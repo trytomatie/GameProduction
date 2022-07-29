@@ -6,6 +6,8 @@ public class Escalator : MonoBehaviour
 {
     public GameObject stairPice;
     public int pieces = 10;
+
+    public int speed = 1;
     // Start is called before the first frame update
     void Start()
     {
@@ -13,6 +15,7 @@ public class Escalator : MonoBehaviour
         {
             GameObject go = Instantiate(stairPice, transform.position, transform.rotation, transform);
             go.GetComponent<Animator>().SetFloat("Offset", (float)i / (float)pieces);
+            go.GetComponent<Animator>().SetFloat("Speed", speed);
         }
     }
 
