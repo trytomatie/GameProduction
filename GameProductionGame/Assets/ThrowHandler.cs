@@ -21,6 +21,7 @@ public class ThrowHandler : State
         isThrowing = true;
         currentThrownItem = Instantiate(cheese, anchorPoint.position, anchorPoint.rotation, anchorPoint);
         currentThrownItem.GetComponent<Rigidbody>().isKinematic = true;
+        currentThrownItem.GetComponent<Collider>().enabled = false;
     }
     public void TriggerThrowEvent(string cmd)
     {
@@ -29,6 +30,7 @@ public class ThrowHandler : State
             currentThrownItem.transform.parent = null;
             currentThrownItem.GetComponent<Rigidbody>().isKinematic = false;
             currentThrownItem.GetComponent<Rigidbody>().velocity = transform.forward * 3;
+            currentThrownItem.GetComponent<Collider>().enabled = true;
         }
 
         if(cmd == "throwComplete")

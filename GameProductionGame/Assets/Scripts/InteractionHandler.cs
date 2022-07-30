@@ -2,22 +2,27 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using System.Linq;
 
 public class InteractionHandler : State
 {
 
     private Animator anim;
-    public Interactable reachableInteractable;
+
+    private Interactable reachableInteractable;
     public bool canInteract = false;
     public float interactionDistance = 0.7f;
     public float interactionAngleThreshold = 45;
-    public GameObject interactionIndicator;
     public Transform itemAnchor;
     public Transform handIkTarget;
     public Transform lookIkTarget;
 
+    private List<Interactable> potentialInteractables = new List<Interactable>();
     private bool isInteracting = false;
     private Camera mainCamera;
+
+
+
     // Start is called before the first frame update
     void Start()
     {
@@ -32,57 +37,58 @@ public class InteractionHandler : State
 
     private void CheckForInteraction()
     {
-        if (reachableInteractable != null && Helper.DistanceBetween(gameObject, reachableInteractable.gameObject) > interactionDistance && Helper.AngleBetween(gameObject, reachableInteractable.gameObject) < interactionAngleThreshold)
+        if(potentialInteractables.Count > 0)
         {
-            interactionIndicator.SetActive(true);
-            Interactable interactable = reachableInteractable.GetComponent<Interactable>();
-            interactionIndicator.transform.position = mainCamera.WorldToScreenPoint(interactable.labelOffset + interactable.transform.position);
-            interactionIndicator.GetComponent<TextMeshProUGUI>().text = interactable.interactionName;
-            canInteract = true;
-        }
-        else
-        {
-            interactionIndicator.SetActive(false);
-            canInteract = false;
+            ReachableInteractable = potentialInteractables.OrderBy(e => Vector3.Distance(transform.position, e.transform.position)).First();
+            if (ReachableInteractable != null && Helper.DistanceBetween(gameObject, ReachableInteractable.gameObject) > interactionDistance && Helper.AngleBetween(gameObject, ReachableInteractable.gameObject) < interactionAngleThreshold)
+            {
+                reachableInteractable.ShowReticleText();
+                canInteract = true;
+            }
+            else
+            {
+                ReachableInteractable.HideReticleText();
+                canInteract = false;
+            }
         }
     }
 
     public override void UpdateState(GameObject source)
     {
-        if(reachableInteractable != null)
+        if (ReachableInteractable != null)
         {
-            lookIkTarget.transform.position = reachableInteractable.transform.position;
+            lookIkTarget.transform.position = ReachableInteractable.transform.position;
         }
     }
 
 
     public override void EnterState(GameObject source)
     {
-        if (reachableInteractable.GetComponent<Interactable_Item>() != null)
+        if (ReachableInteractable.GetComponent<Interactable_Item>() != null)
         {
             anim.SetTrigger("grab");
-            handIkTarget.transform.position = reachableInteractable.transform.position + new Vector3(0, 0.08f, 0);
+            handIkTarget.transform.position = ReachableInteractable.transform.position + new Vector3(0, 0.08f, 0);
 
         }
-        else if (reachableInteractable.GetComponent<Interactable_KeycardPanel>() != null)
+        else if (ReachableInteractable.GetComponent<Interactable_KeycardPanel>() != null)
         {
             anim.SetTrigger("interact");
-            handIkTarget.transform.position = reachableInteractable.GetComponent<Interactable_KeycardPanel>().ikTarget.transform.position;
+            handIkTarget.transform.position = ReachableInteractable.GetComponent<Interactable_KeycardPanel>().ikTarget.transform.position;
         }
 
-        interactionIndicator.SetActive(false);
         isInteracting = true;
 
-        transform.rotation = Quaternion.LookRotation(new Vector3(reachableInteractable.transform.position.x, 0, reachableInteractable.transform.position.z) - new Vector3(transform.position.x, 0, transform.position.z), Vector3.up);
+        transform.rotation = Quaternion.LookRotation(new Vector3(ReachableInteractable.transform.position.x, 0, ReachableInteractable.transform.position.z) - new Vector3(transform.position.x, 0, transform.position.z), Vector3.up);
     }
 
     public override void ExitState(GameObject source)
     {
-        if (reachableInteractable.GetComponent<Interactable_Item>() != null)
+        if (ReachableInteractable != null && ReachableInteractable.GetComponent<Interactable_Item>() != null)
         {
-            Destroy(reachableInteractable.gameObject);
+            potentialInteractables.Remove(ReachableInteractable);
+            Destroy(ReachableInteractable.gameObject);
         }
-        reachableInteractable = null;
+        ReachableInteractable = null;
     }
 
     public override StateName Transition(GameObject source)
@@ -98,34 +104,57 @@ public class InteractionHandler : State
     {
         if (ae.stringParameter == "OnGrabStart")
         {
-            reachableInteractable.transform.parent = itemAnchor;
-            reachableInteractable.transform.localPosition = Vector3.zero;
-            reachableInteractable.transform.rotation = new Quaternion(0, 0, 0, 0);
-            reachableInteractable.GetComponent<Rigidbody>().isKinematic = true;
+            ReachableInteractable.transform.parent = itemAnchor;
+            ReachableInteractable.transform.localPosition = Vector3.zero;
+            ReachableInteractable.transform.rotation = new Quaternion(0, 0, 0, 0);
+            ReachableInteractable.GetComponent<Rigidbody>().isKinematic = true;
         }
         if (ae.stringParameter == "OnGrabComplete" || ae.stringParameter == "OnInteractionComplete")
         {
             anim.SetTrigger("interactionComplete");
             isInteracting = false;
             canInteract = false;
-            reachableInteractable.Interaction(gameObject);
+            ReachableInteractable.Interaction(gameObject);
 
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Interactable") && !isInteracting)
+        if(other.gameObject.GetComponent<Interactable>() != null)
         {
-            reachableInteractable = other.gameObject.GetComponent<Interactable>();
+            Interactable interactable = other.gameObject.GetComponent<Interactable>();
+            if (!isInteracting && !potentialInteractables.Contains(interactable))
+            {
+                potentialInteractables.Add(interactable);
+                interactable.IsReachable = true;
+            }
         }
+
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.CompareTag("Item") && !isInteracting)
+        if (other.gameObject.GetComponent<Interactable>() != null)
         {
-            reachableInteractable = null;
+            Interactable interactable = other.gameObject.GetComponent<Interactable>();
+            if (!isInteracting)
+            {
+                potentialInteractables.Remove(other.gameObject.GetComponent<Interactable>());
+                interactable.IsReachable = false;
+            }
         }
+    }
+
+    public Interactable ReachableInteractable 
+    { get => reachableInteractable;
+        set 
+        {
+            if(reachableInteractable != value && reachableInteractable != null)
+            {
+                reachableInteractable.HideReticleText();
+            }
+            reachableInteractable = value;
+        } 
     }
 }

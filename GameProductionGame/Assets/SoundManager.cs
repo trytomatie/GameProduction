@@ -6,16 +6,33 @@ using UnityEngine;
 public class SoundManager : MonoBehaviour
 {
     public AudioClip[] clips;
-    private AudioSource audioSource;
+    private static List<AudioSource> soundSources = new List<AudioSource>();
+
 
     private void Start()
     {
-        audioSource = GetComponent<AudioSource>();
+        if(soundSources.Count == 0)
+        {
+            foreach(GameObject go in GameObject.FindGameObjectsWithTag("DynamicSound"))
+            {
+                soundSources.Add(go.GetComponent<AudioSource>());
+            }
+        }
+
     }
-    public void TriggerSoundEvent(string soundName)
+    public void TriggerSoundEvent(AnimationEvent sound)
     {
-        audioSource.clip = clips.First(e => e.name == soundName);
-        audioSource.Play();
-        audioSource.pitch = Random.Range(0.9f,1.1f);
+        AudioSource freeSource = soundSources.First(e => !e.isPlaying);
+        freeSource.transform.position = transform.position;
+        freeSource.clip = clips.First(e => e.name == sound.stringParameter);
+        freeSource.Play();
+        if(sound.intParameter == 0)
+        {
+            freeSource.pitch = Random.Range(0.9f, 1.1f);
+        }
+        else
+        {
+            freeSource.pitch = 1;
+        }
     }
 }

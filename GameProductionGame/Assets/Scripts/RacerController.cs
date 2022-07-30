@@ -10,15 +10,24 @@ public class RacerController : State
     public float backwardsSpeed = 6;
     public float acceleration = 7;
     public float turnspeed = 15;
+    public float sneakSpeed = 2f;
 
     [Header("Physics")]
     public float gravity = -9.81f;
+    public bool grounded = false;
+
+    [Header("GroundCheck")]
+    public float castDistance = 0.09f;
+    public float castScaleFactor = 1;
     public LayerMask layerMask;
 
 
-
+    [Header("Sneaking")]
+    public bool isSneaking = false;
 
     private bool isJumping = false;
+    
+    public float jumpStrength = 5;
     private Vector3 lastHitPoint;
     private Vector3 slideMovement;
 
@@ -58,6 +67,7 @@ public class RacerController : State
         }
         HandleJump();
         CalculateGravity();
+        HandleSneaking();
         Movement();
         Rotation();
         Animations();
@@ -80,6 +90,7 @@ public class RacerController : State
     {
         anim.SetFloat("speed", movementSpeed);
         anim.SetFloat("ySpeed", ySpeed / 12);
+        anim.SetBool("isSneaking", isSneaking);
     }
 
     private void Rotation()
@@ -96,15 +107,20 @@ public class RacerController : State
         float verticalInput = Input.GetAxisRaw("Vertical");
         float horizontalInput = Input.GetAxisRaw("Horizontal");
         float targetSpeed = runSpeed;
+
         if (Input.GetKey(KeyCode.LeftShift))
         {
             targetSpeed = walkSpeed;
         }
+        if(isSneaking)
+        {
+            targetSpeed = sneakSpeed;
+        }
 
         // If character is landing, he cant move
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Landing"))
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Jumping"))
         {
-            movement = Vector3.zero;
+            movement = new Vector3(horizontalInput * 0.1f, 0, verticalInput*0.1f).normalized;
         }
         else
         {
@@ -126,16 +142,25 @@ public class RacerController : State
             + slideMovement);
     }
 
+    private void HandleSneaking()
+    {
+        if(Input.GetKeyDown(KeyCode.C))
+        {
+            isSneaking = !isSneaking;
+        }
+    }
+
     private void HandleJump()
     {
-        if (Input.GetButtonDown("Jump") && !isJumping && Helper.CheckBeneath(transform.position, cc, layerMask, 0.07f, 1.3f) && anim.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
+        if (Input.GetButtonDown("Jump") && !isJumping && grounded 
+            && anim.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
         {
             print("test");
             isJumping = true;
-            ySpeed += 10;
+            ySpeed += jumpStrength;
             anim.SetTrigger("jump");
         }
-        if (Helper.CheckBeneath(transform.position, cc, layerMask, 1f, 0.5f) && isJumping && ySpeed <= 0)
+        if (grounded && isJumping && ySpeed <= 0)
         {
             isJumping = false;
             anim.SetTrigger("land");
@@ -146,12 +171,14 @@ public class RacerController : State
     private void CalculateGravity()
     {
         
-        if (!Helper.CheckBeneath(transform.position, cc, layerMask, 0.09f, 1.8f))
+        if (!Helper.CheckBeneath(transform.position, cc, layerMask, castDistance, castScaleFactor))
         {
             ySpeed += gravity * Time.deltaTime;
+            grounded = false;
         }
         else
         {
+            grounded = true;
             if (ySpeed < 0)
             {
                 ySpeed = 0;
@@ -165,10 +192,6 @@ public class RacerController : State
         lastHitPoint = hit.point;
     }
 
-    private void OnDrawGizmos()
-    {
-        //Gizmos.DrawWireSphere(transform.position + new Vector3(0, (cc.radius + cc.skinWidth) * 1 + 0.05f, 0), (cc.radius + cc.skinWidth) * 1);
-    }
 
     public override void EnterState(GameObject source)
     {
@@ -196,6 +219,17 @@ public class RacerController : State
 
     public override void ExitState(GameObject source)
     {
+
+    }
+
+
+    void OnDrawGizmosSelected()
+    {
+        CharacterController characterController = GetComponent<CharacterController>();
+        for(int i = 0; i < 10;i++)
+        {
+            Gizmos.DrawSphere(transform.position + new Vector3(0, castDistance / i,0),(characterController.radius + characterController.skinWidth) * castScaleFactor);
+        }
 
     }
 
