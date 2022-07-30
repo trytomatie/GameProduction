@@ -15,8 +15,9 @@ public class MouseStateManager : MonoBehaviour
     public MouseIdleState mouseIdle = new MouseIdleState();
     public MouseAnimationState mouseAni = new MouseAnimationState();
     public MouseyCheckForStuff checkForStuff = new MouseyCheckForStuff();
-    public MouseyChase mCahse = new MouseyChase();
-    MouseBaseState currentState;
+    public MouseyChase mChase = new MouseyChase();
+    public MouseCheeseState mouseCheese = new MouseCheeseState();
+    public MouseBaseState currentState;
 
     [HideInInspector]
     public Animator mouseAnimator;
@@ -25,6 +26,9 @@ public class MouseStateManager : MonoBehaviour
 
     [HideInInspector]
     public GameObject player;
+    [HideInInspector]
+    public GameObject cheese;
+
     public Transform[] patrolPoints;
     public int nextPatrolPoint;
     
@@ -32,11 +36,16 @@ public class MouseStateManager : MonoBehaviour
     public bool forward;
     [HideInInspector]
     public bool inChase;
+    //public bool distracted;
 
     public LayerMask mouseRayCastLayers;
     public float mouseyFieldOfView;
     public float eyeHeight;
     public float mouseyViewingDistance;
+
+
+
+
     
 
     // Start is called before the first frame update
@@ -52,6 +61,7 @@ public class MouseStateManager : MonoBehaviour
         nextPatrolPoint = 0;
         forward = true;
         inChase = false;
+       // distracted = false;
     }
 
     // Update is called once per frame
