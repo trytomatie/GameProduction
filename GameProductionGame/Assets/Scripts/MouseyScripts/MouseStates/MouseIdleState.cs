@@ -17,8 +17,8 @@ public class MouseIdleState : MouseBaseState
     {
         counter = 0;
         timerseconds = Random.Range(1, 5);
-        Debug.Log(timerseconds+"timerSeconds");
-        Debug.Log("idle");
+        //Debug.Log(timerseconds+"timerSeconds");
+        //Debug.Log("idle");
 
         
        

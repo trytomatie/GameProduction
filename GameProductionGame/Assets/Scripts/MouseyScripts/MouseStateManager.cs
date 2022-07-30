@@ -10,32 +10,56 @@ using UnityEngine.AI;
 
 public class MouseStateManager : MonoBehaviour
 {
-    MouseBaseState currentState;
+    
     public MousePatrolState mousePatrol = new MousePatrolState();
     public MouseIdleState mouseIdle = new MouseIdleState();
     public MouseAnimationState mouseAni = new MouseAnimationState();
+    public MouseyCheckForStuff checkForStuff = new MouseyCheckForStuff();
+    public MouseyChase mCahse = new MouseyChase();
+    MouseBaseState currentState;
 
+    [HideInInspector]
+    public Animator mouseAnimator;
+    [HideInInspector]
+    public NavMeshAgent navMeshMouseAgent;
+
+    [HideInInspector]
+    public GameObject player;
     public Transform[] patrolPoints;
     public int nextPatrolPoint;
-    public NavMeshAgent navMeshMouseAgent;
+    
+    [HideInInspector]
     public bool forward;
-    public Animator mouseAnimator;
+    [HideInInspector]
+    public bool inChase;
+
+    public LayerMask mouseRayCastLayers;
+    public float mouseyFieldOfView;
+    public float eyeHeight;
+    public float mouseyViewingDistance;
+    
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         currentState = mouseIdle;
         currentState.EnterMouseState(this);
 
         navMeshMouseAgent = GetComponent<NavMeshAgent>();
         mouseAnimator = GetComponent<Animator>();
+        player = GameObject.Find("Clyde The Kid");
 
         nextPatrolPoint = 0;
+        forward = true;
+        inChase = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        //Check for Player
+        checkForStuff.UpdateMouseState(this);
+
         //Update current state
         currentState.UpdateMouseState(this);
 
@@ -53,5 +77,10 @@ public class MouseStateManager : MonoBehaviour
         currentState.ExitMouseState(this);
         currentState = newMouseState;
         currentState.EnterMouseState(this);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        checkForStuff.MouseTrigger(other, this);
     }
 }

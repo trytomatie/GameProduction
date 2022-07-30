@@ -32,7 +32,7 @@ public class MousePatrolState : MouseBaseState
         if (Mouse.navMeshMouseAgent.remainingDistance <= 0.1f  /*&& Mouse.navMeshMouseAgent.pathStatus==NavMeshPathStatus.PathComplete*/)
         {
             Mouse.SwitchMouseState(Mouse.mouseIdle);
-            Debug.Log("ChangeState");
+            //Debug.Log("ChangeState");
         } 
         
         
