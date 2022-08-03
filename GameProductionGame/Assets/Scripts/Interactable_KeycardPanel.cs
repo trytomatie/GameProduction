@@ -5,7 +5,6 @@ using UnityEngine;
 public class Interactable_KeycardPanel : Interactable
 {
     public Animator anim;
-    public Transform ikTarget;
     private void Start()
     {
         interactionName = "Interact";
@@ -21,6 +20,11 @@ public class Interactable_KeycardPanel : Interactable
             enabled = false;
         }
 
+    }
+
+    public override void TriggerAnimation(GameObject source)
+    {
+        source.GetComponent<Animator>().SetTrigger("interact");
     }
 }
 

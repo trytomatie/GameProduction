@@ -8,6 +8,7 @@ public class Interactable : MonoBehaviour
     public string interactionName;
     public Vector3 labelOffset;
 
+    public Transform ikTarget;
     public GameObject reticle;
     private GameObject reticleInstance;
     private Animator reticleAnimator;
@@ -21,6 +22,12 @@ public class Interactable : MonoBehaviour
 
     private bool isReachable;
     public virtual void Interaction(GameObject soruce)
+    {
+
+    }
+
+
+    public virtual void TriggerAnimation(GameObject source)
     {
 
     }

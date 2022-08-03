@@ -13,6 +13,7 @@ public class Interactable_Item : Interactable
 
     public override void Interaction(GameObject source)
     {
+
         Inventory inventory = source.GetComponent<Inventory>();
         switch(itemType)
         {
@@ -23,6 +24,11 @@ public class Interactable_Item : Interactable
                 inventory.cheese++;
                 break;
         }
+    }
+
+    public override void TriggerAnimation(GameObject source)
+    {
+        source.GetComponent<Animator>().SetTrigger("grab");
     }
 }
 

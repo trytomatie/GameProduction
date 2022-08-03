@@ -202,6 +202,7 @@ public class RacerController : State
     {
         if(Input.GetKeyDown(KeyCode.E) && gameObject.GetComponent<InteractionHandler>().canInteract)
         {
+            isSneaking = false;
             movementSpeed = 0;
             Animations();
             isTransitioning = true;

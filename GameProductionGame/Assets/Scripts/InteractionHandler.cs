@@ -42,7 +42,7 @@ public class InteractionHandler : State
             ReachableInteractable = potentialInteractables.OrderBy(e => Vector3.Distance(transform.position, e.transform.position)).First();
             if (ReachableInteractable != null && Helper.DistanceBetween(gameObject, ReachableInteractable.gameObject) > interactionDistance && Helper.AngleBetween(gameObject, ReachableInteractable.gameObject) < interactionAngleThreshold)
             {
-                reachableInteractable.ShowReticleText();
+                ReachableInteractable.ShowReticleText();
                 canInteract = true;
             }
             else
@@ -50,6 +50,25 @@ public class InteractionHandler : State
                 ReachableInteractable.HideReticleText();
                 canInteract = false;
             }
+        }
+    }
+
+    public void TriggerAnimationEvent(AnimationEvent ae)
+    {
+        if (ae.stringParameter == "OnGrabStart")
+        {
+            ReachableInteractable.transform.parent = itemAnchor;
+            ReachableInteractable.transform.localPosition = Vector3.zero;
+            ReachableInteractable.transform.rotation = new Quaternion(0, 0, 0, 0);
+            ReachableInteractable.GetComponent<Rigidbody>().isKinematic = true;
+        }
+        if (ae.stringParameter == "OnGrabComplete" || ae.stringParameter == "OnInteractionComplete")
+        {
+            anim.SetTrigger("interactionComplete");
+            isInteracting = false;
+            canInteract = false;
+            ReachableInteractable.Interaction(gameObject);
+
         }
     }
 
@@ -66,14 +85,20 @@ public class InteractionHandler : State
     {
         if (ReachableInteractable.GetComponent<Interactable_Item>() != null)
         {
-            anim.SetTrigger("grab");
+            reachableInteractable.TriggerAnimation(source);
             handIkTarget.transform.position = ReachableInteractable.transform.position + new Vector3(0, 0.08f, 0);
-
         }
-        else if (ReachableInteractable.GetComponent<Interactable_KeycardPanel>() != null)
+        else if (ReachableInteractable.GetComponent<Interactable>() != null)
         {
-            anim.SetTrigger("interact");
-            handIkTarget.transform.position = ReachableInteractable.GetComponent<Interactable_KeycardPanel>().ikTarget.transform.position;
+            reachableInteractable.TriggerAnimation(source);
+            if (ReachableInteractable.ikTarget != null)
+            {
+                handIkTarget.transform.position = ReachableInteractable.GetComponent<Interactable>().ikTarget.transform.position;
+            }
+        }
+        else
+        {
+            return;
         }
 
         isInteracting = true;
@@ -100,26 +125,9 @@ public class InteractionHandler : State
         return stateName;
     }
 
-    public void TriggerAnimationEvent(AnimationEvent ae)
-    {
-        if (ae.stringParameter == "OnGrabStart")
-        {
-            ReachableInteractable.transform.parent = itemAnchor;
-            ReachableInteractable.transform.localPosition = Vector3.zero;
-            ReachableInteractable.transform.rotation = new Quaternion(0, 0, 0, 0);
-            ReachableInteractable.GetComponent<Rigidbody>().isKinematic = true;
-        }
-        if (ae.stringParameter == "OnGrabComplete" || ae.stringParameter == "OnInteractionComplete")
-        {
-            anim.SetTrigger("interactionComplete");
-            isInteracting = false;
-            canInteract = false;
-            ReachableInteractable.Interaction(gameObject);
 
-        }
-    }
 
-    private void OnTriggerEnter(Collider other)
+    public void EnterTrigger(Collider other)
     {
         if(other.gameObject.GetComponent<Interactable>() != null)
         {
@@ -133,7 +141,7 @@ public class InteractionHandler : State
 
     }
 
-    private void OnTriggerExit(Collider other)
+    public void ExitTrigger(Collider other)
     {
         if (other.gameObject.GetComponent<Interactable>() != null)
         {
