@@ -19,7 +19,7 @@ public class MouseIdleState : MouseBaseState
         timerseconds = Random.Range(1, 5);
         //Debug.Log(timerseconds+"timerSeconds");
         //Debug.Log("idle");
-        Mouse.PlayVoiceLines(Mouse.voiceLines[0]);
+        //Mouse.PlayVoiceLines(Mouse.voiceLines[0]);
 
 
     }
