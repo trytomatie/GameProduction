@@ -11,13 +11,14 @@ public class SoundManager : MonoBehaviour
 
     private void Start()
     {
-        if(soundSources.Count == 0)
-        {
-            foreach(GameObject go in GameObject.FindGameObjectsWithTag("DynamicSound"))
+        //if(soundSources.Count == 0)
+        //{
+        soundSources= new List<AudioSource>();
+        foreach (GameObject go in GameObject.FindGameObjectsWithTag("DynamicSound"))
             {
                 soundSources.Add(go.GetComponent<AudioSource>());
             }
-        }
+        //}
 
     }
     public void TriggerSoundEvent(AnimationEvent sound)

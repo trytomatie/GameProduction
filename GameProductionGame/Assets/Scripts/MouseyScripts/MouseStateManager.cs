@@ -76,16 +76,18 @@ public class MouseStateManager : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         //Check for Player
         checkForStuff.UpdateMouseState(this);
 
+        //update the animations
+        mouseAni.UpdateMouseState(this);
+
         //Update current state
         currentState.UpdateMouseState(this);
 
-        //update the animations
-        mouseAni.UpdateMouseState(this);
+       
     }
 
 
@@ -112,7 +114,12 @@ public class MouseStateManager : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         checkForStuff.MouseTrigger(other, this);
+        print("onTriggerEnter");
     }
 
-    
+    private void OnTriggerExit(Collider other)
+    {
+        checkForStuff.MouseTriggerExit(other, this);
+    }
+
 }
