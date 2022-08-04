@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Markus Schwalb
@@ -43,7 +42,7 @@ public class MouseyCheckForStuff : MouseBaseState
 
     private bool CheckPlayerInView(GameObject player, MouseStateManager Mouse)
     {
-        //Debug.Log("CheckPlayerInView");
+        Debug.Log("CheckPlayerInView");
         Vector3 vectorBetween = player.transform.position - Mouse.transform.position;
         float angle = Vector3.Angle(vectorBetween, Mouse.transform.forward);
 
@@ -56,13 +55,13 @@ public class MouseyCheckForStuff : MouseBaseState
             }
 
         }
-        //Debug.Log("CheckPlayerInViewFalse");
+        Debug.Log("CheckPlayerInViewFalse");
         return false;
     }
 
     private bool playerHitByRaycast(MouseStateManager Mouse, Vector3 vectorToPlayer)
     {
-        //Debug.Log("playerHitbyRaycasttest");
+        Debug.Log("playerHitbyRaycasttest");
         Vector3 rayCastOrigin = new Vector3(Mouse.transform.position.x, Mouse.transform.position.y + Mouse.eyeHeight, Mouse.transform.position.z);
         
         RaycastHit hit;
@@ -97,14 +96,13 @@ public class MouseyCheckForStuff : MouseBaseState
     /// <param name="Mouse"></param>
    public void MouseTrigger(Collider other, MouseStateManager Mouse)
     {
-       
         if (Mouse.currentState != Mouse.mChase)
         {
             if (other.gameObject.GetComponent<Interactable_Item>() != null)
             {
                 GameObject item = other.gameObject;
                 Interactable_Item itemScript = item.GetComponent<Interactable_Item>();
-                if (itemScript.itemType == Interactable_Item.ItemType.Cheese && Mouse.cheese==null)
+                if (itemScript.itemType == Interactable_Item.ItemType.Cheese)
                 {
                     Mouse.cheese = item;
                     Mouse.SwitchMouseState(Mouse.mouseCheese);
@@ -114,31 +112,12 @@ public class MouseyCheckForStuff : MouseBaseState
         
     }
 
-    public void MouseTriggerExit(Collider other, MouseStateManager Mouse)
-    {
-        /*if (Mouse.currentState != Mouse.mChase)
-        {
-            if (other.gameObject.GetComponent<Interactable_Item>() != null)
-            {
-                GameObject item = other.gameObject;
-                Interactable_Item itemScript = item.GetComponent<Interactable_Item>();
-                if (itemScript.itemType == Interactable_Item.ItemType.Cheese)
-                {
-                    Debug.Log("Exit");
-                    Mouse.cheese = null;
-                    GameObject.Destroy(item, 12);
-                }
-            }
-        }*/
-    }
-
     private void calculateDistance(MouseStateManager Mouse)
     {
         distance = Vector3.Distance(Mouse.player.transform.position, Mouse.transform.position);
         if (Mouse.currentState == Mouse.mChase && distance < 0.2f)
         {
             Debug.Log("verloren");
-            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
         }
     }
 

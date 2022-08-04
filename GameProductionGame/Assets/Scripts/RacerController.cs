@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+/// <summary>
+/// By Christian Scherzer
+/// </summary>
 public class RacerController : State
 {
     [Header("Speed stats")]
@@ -62,22 +65,7 @@ public class RacerController : State
         chaseVolume = GameObject.Find("ChaseVolume").GetComponent<Volume>();
     }
 
-    // Update is called once per frame
-    public override void UpdateState(GameObject source)
-    {
-        if(isTransitioning)
-        {
-            isTransitioning = false;
-            return;
-        }
-        HandleJump();
-        CalculateGravity();
-        HandleSneaking();
-        Movement();
-        Rotation();
-        Animations();
 
-    }
 
 
     private void LateUpdate()
@@ -104,6 +92,9 @@ public class RacerController : State
         HandleNoise();
     }
 
+    /// <summary>
+    /// Handle Animations
+    /// </summary>
     private void Animations()
     {
         anim.SetFloat("speed", movementSpeed);
@@ -111,6 +102,9 @@ public class RacerController : State
         anim.SetBool("isSneaking", isSneaking);
     }
 
+    /// <summary>
+    /// Handle Noise
+    /// </summary>
     private void HandleNoise()
     {
         if (anim.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
@@ -144,6 +138,9 @@ public class RacerController : State
         }
     }
 
+    /// <summary>
+    /// Handle Rotation
+    /// </summary>
     private void Rotation()
     {
         if (cc.velocity.magnitude > 0)
@@ -153,6 +150,9 @@ public class RacerController : State
         }
     }
 
+    /// <summary>
+    /// Handle Movement
+    /// </summary>
     private void Movement()
     {
         float verticalInput = Input.GetAxisRaw("Vertical");
@@ -193,6 +193,9 @@ public class RacerController : State
             + slideMovement);
     }
 
+    /// <summary>
+    /// Handle Sneaking Functionaltiy
+    /// </summary>
     private void HandleSneaking()
     {
         if(Input.GetKeyDown(KeyCode.C))
@@ -201,6 +204,9 @@ public class RacerController : State
         }
     }
 
+    /// <summary>
+    /// Handle Jump Input
+    /// </summary>
     private void HandleJump()
     {
         if (Input.GetButtonDown("Jump") && !isJumping && grounded 
@@ -219,6 +225,9 @@ public class RacerController : State
         }
     }
 
+    /// <summary>
+    /// Calculates gravity
+    /// </summary>
     private void CalculateGravity()
     {
         
@@ -243,6 +252,22 @@ public class RacerController : State
         lastHitPoint = hit.point;
     }
 
+    #region StateMethodes
+    public override void UpdateState(GameObject source)
+    {
+        if (isTransitioning)
+        {
+            isTransitioning = false;
+            return;
+        }
+        HandleJump();
+        CalculateGravity();
+        HandleSneaking();
+        Movement();
+        Rotation();
+        Animations();
+
+    }
 
     public override void EnterState(GameObject source)
     {
@@ -274,7 +299,7 @@ public class RacerController : State
 
     }
 
-
+    #endregion
     void OnDrawGizmosSelected()
     {
         CharacterController characterController = GetComponent<CharacterController>();

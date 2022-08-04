@@ -7,30 +7,36 @@ public class Interactable : MonoBehaviour
 {
     public string interactionName;
     public Vector3 labelOffset;
-
     public Transform ikTarget;
     public GameObject reticle;
     private GameObject reticleInstance;
     private Animator reticleAnimator;
     private Transform reticleHolder;
+    private bool isReachable;
 
     private void Awake()
     {
         reticleHolder = GameObject.Find("ReticleHolder").transform;
     }
 
-
-    private bool isReachable;
+    /// <summary>
+    /// Method of Interaction
+    /// </summary>
+    /// <param name="soruce"></param>
     public virtual void Interaction(GameObject soruce)
     {
 
     }
 
-
+    /// <summary>
+    /// Method that triggers the Animation of Interaction
+    /// </summary>
+    /// <param name="source"></param>
     public virtual void TriggerAnimation(GameObject source)
     {
 
     }
+
 
     public bool IsReachable
     {
@@ -53,6 +59,9 @@ public class Interactable : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Spawn the UI reticle
+    /// </summary>
     private void SpawnReticle()
     {
         if (reticleInstance == null)
@@ -64,6 +73,9 @@ public class Interactable : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Despawn the UI reticle
+    /// </summary>
     private void DespawnReticle()
     {
         reticleAnimator.SetTrigger("Despawn");
@@ -71,12 +83,18 @@ public class Interactable : MonoBehaviour
         reticleInstance = null;
     }
 
+    /// <summary>
+    /// Show text of reticle
+    /// </summary>
     public void ShowReticleText()
     {
         if (reticleAnimator != null) reticleAnimator.SetBool("ShowText", true);
 
     }
 
+    /// <summary>
+    /// Despawn Text of Reticle
+    /// </summary>
     public void HideReticleText()
     {
         if (reticleAnimator != null) reticleAnimator.SetBool("ShowText", false);

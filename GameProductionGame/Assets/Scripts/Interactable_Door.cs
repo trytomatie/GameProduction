@@ -37,6 +37,9 @@ public class Interactable_Door : Interactable
         source.GetComponent<Animator>().SetTrigger("openDoor");
     }
 
+    /// <summary>
+    /// Sets the collider of the Door back to solid
+    /// </summary>
     public void SetColliderSolid()
     {
         coll.isTrigger = false;

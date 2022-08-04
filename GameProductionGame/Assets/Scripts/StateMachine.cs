@@ -42,7 +42,10 @@ public class StateMachine : MonoBehaviour
         return state;
     }
 
-
+    /// <summary>
+    /// Handle state functionality
+    /// </summary>
+    /// <param name="state"></param>
     void Tick(State state)
     {
         currentState.UpdateState(gameObject);

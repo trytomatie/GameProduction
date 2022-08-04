@@ -6,6 +6,15 @@ using UnityEngine;
 public class Helper : MonoBehaviour
 {
 
+    /// <summary>
+    /// Checks the ground beneath the character
+    /// </summary>
+    /// <param name="position"></param>
+    /// <param name="cc"></param>
+    /// <param name="layerMask"></param>
+    /// <param name="distance"></param>
+    /// <param name="scaleFactor"></param>
+    /// <returns></returns>
     public static bool CheckBeneath(Vector3 position, CharacterController cc, LayerMask layerMask, float distance, float scaleFactor)
     {
         RaycastHit raycastHit;
@@ -28,6 +37,12 @@ public class Helper : MonoBehaviour
         return distance;
     }
 
+    /// <summary>
+    /// returns Angle beteween 2 objects
+    /// </summary>
+    /// <param name="origin"></param>
+    /// <param name="angleObject"></param>
+    /// <returns></returns>
     public static float AngleBetween(GameObject origin, GameObject angleObject)
     {
 

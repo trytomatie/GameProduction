@@ -35,6 +35,9 @@ public class InteractionHandler : State
         CheckForInteraction();
     }
 
+    /// <summary>
+    /// Checks if an Interaction is available
+    /// </summary>
     private void CheckForInteraction()
     {
         if(potentialInteractables.Count > 0)
@@ -71,7 +74,41 @@ public class InteractionHandler : State
 
         }
     }
+    /// <summary>
+    /// Method that gets called when an object enters the InteractionTrigger
+    /// </summary>
+    /// <param name="other"></param>
+    public void EnterTrigger(Collider other)
+    {
+        if (other.gameObject.GetComponent<Interactable>() != null)
+        {
+            Interactable interactable = other.gameObject.GetComponent<Interactable>();
+            if (!isInteracting && !potentialInteractables.Contains(interactable))
+            {
+                potentialInteractables.Add(interactable);
+                interactable.IsReachable = true;
+            }
+        }
 
+    }
+    /// <summary>
+    /// Method that gets called when an object leaves the InteractionTrigger
+    /// </summary>
+    /// <param name="other"></param>
+    public void ExitTrigger(Collider other)
+    {
+        if (other.gameObject.GetComponent<Interactable>() != null)
+        {
+            Interactable interactable = other.gameObject.GetComponent<Interactable>();
+            if (!isInteracting)
+            {
+                potentialInteractables.Remove(other.gameObject.GetComponent<Interactable>());
+                interactable.IsReachable = false;
+            }
+        }
+    }
+
+    #region StateMachine Methods
     public override void UpdateState(GameObject source)
     {
         if (ReachableInteractable != null)
@@ -125,34 +162,8 @@ public class InteractionHandler : State
         return stateName;
     }
 
+    #endregion
 
-
-    public void EnterTrigger(Collider other)
-    {
-        if(other.gameObject.GetComponent<Interactable>() != null)
-        {
-            Interactable interactable = other.gameObject.GetComponent<Interactable>();
-            if (!isInteracting && !potentialInteractables.Contains(interactable))
-            {
-                potentialInteractables.Add(interactable);
-                interactable.IsReachable = true;
-            }
-        }
-
-    }
-
-    public void ExitTrigger(Collider other)
-    {
-        if (other.gameObject.GetComponent<Interactable>() != null)
-        {
-            Interactable interactable = other.gameObject.GetComponent<Interactable>();
-            if (!isInteracting)
-            {
-                potentialInteractables.Remove(other.gameObject.GetComponent<Interactable>());
-                interactable.IsReachable = false;
-            }
-        }
-    }
 
     public Interactable ReachableInteractable 
     { get => reachableInteractable;

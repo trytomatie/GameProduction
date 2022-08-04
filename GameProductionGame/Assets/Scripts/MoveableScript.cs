@@ -15,6 +15,7 @@ public class MoveableScript : MonoBehaviour
 
     private void Update()
     {
+        // Calculates velocity
         if(lastPosition != transform.position)
         {
             movement = transform.position - lastPosition;
