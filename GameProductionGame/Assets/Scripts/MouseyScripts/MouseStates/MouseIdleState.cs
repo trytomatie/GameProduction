@@ -19,9 +19,9 @@ public class MouseIdleState : MouseBaseState
         timerseconds = Random.Range(1, 5);
         //Debug.Log(timerseconds+"timerSeconds");
         //Debug.Log("idle");
+        Mouse.PlayVoiceLines(Mouse.voiceLines[0]);
 
-        
-       
+
     }
 
     public override void UpdateMouseState(MouseStateManager Mouse)
@@ -31,6 +31,7 @@ public class MouseIdleState : MouseBaseState
         if (counter >= timerseconds)
         {
             Mouse.SwitchMouseState(Mouse.mousePatrol);
+            //Mouse.SwitchMouseState(Mouse.mouseySearch);
         }
     }
 

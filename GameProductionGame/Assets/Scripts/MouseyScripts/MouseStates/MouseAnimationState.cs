@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,7 +12,7 @@ public class MouseAnimationState : MouseBaseState
 {
     public override void EnterMouseState(MouseStateManager Mouse)
     {
-
+        Mouse.lookAt.transform.position = Mouse.transform.forward * 5 + new Vector3(0,2,0);
     }
 
     public override void UpdateMouseState(MouseStateManager Mouse)
@@ -19,6 +20,21 @@ public class MouseAnimationState : MouseBaseState
         float speed = Mouse.navMeshMouseAgent.velocity.magnitude;
         Mouse.mouseAnimator.SetFloat("Direction", speed);
         //Debug.Log("Gonna go fast "+ Mouse.navMeshMouseAgent.velocity);
+
+        updateLookAt(Mouse);
+        
+    }
+
+    private void updateLookAt(MouseStateManager Mouse)
+    {
+        if (Mouse.currentState == Mouse.mChase)
+        {
+            Mouse.lookAt.transform.position = Vector3.Lerp(Mouse.lookAt.transform.position, Mouse.player.transform.position+ new Vector3(0,0f,0), Time.deltaTime);
+        } 
+        else
+        {
+            Mouse.lookAt.transform.position = Vector3.Lerp(Mouse.lookAt.transform.position, Mouse.transform.position + Mouse.transform.forward * 5 + new Vector3(0, 1, 0), Time.deltaTime);
+        }
     }
 
     public override void ExitMouseState(MouseStateManager Mouse)

@@ -338,7 +338,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42ef2681fa3dc8c4fa031f044e68c63f, type: 3}
   m_Name: GlobalIllumination
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   m_AdvancedMode: 0
   quality:
     m_OverrideState: 1
@@ -432,13 +432,13 @@ MonoBehaviour:
   m_AdvancedMode: 0
   lift:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.9486323, z: 0.6960027, w: -0.049423333}
+    m_Value: {x: 1, y: 0.95, z: 0.7, w: -0.049423333}
   gamma:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.8302249, z: 0.8405592, w: 0}
+    m_Value: {x: 1, y: 0.83, z: 0.8413333, w: 0}
   gain:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.56876004, z: 0.59834623, w: 0.20662883}
+    m_Value: {x: 1, y: 0.57, z: 0.5986666, w: 0.20662883}
 --- !u!114 &-1556292756431438640
 MonoBehaviour:
   m_ObjectHideFlags: 3
@@ -615,7 +615,7 @@ MonoBehaviour:
   m_AdvancedMode: 0
   shadows:
     m_OverrideState: 1
-    m_Value: {x: 1, y: 0.8135132, z: 0.75763327, w: 0.80444455}
+    m_Value: {x: 1, y: 0.816, z: 0.76, w: 0.80444455}
   midtones:
     m_OverrideState: 0
     m_Value: {x: 1, y: 1, z: 1, w: 0}

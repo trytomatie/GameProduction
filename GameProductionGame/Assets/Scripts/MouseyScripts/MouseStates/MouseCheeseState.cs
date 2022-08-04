@@ -13,11 +13,13 @@ public class MouseCheeseState : MouseBaseState
         Mouse.navMeshMouseAgent.SetDestination(Mouse.cheese.transform.position);
         Debug.Log("Cheese");
         timer = 0;
+        Mouse.PlayVoiceLines(Mouse.voiceLines[2]);
     }
 
     public override void UpdateMouseState(MouseStateManager Mouse)
     {
-        if (Vector3.Distance(Mouse.cheese.transform.position, Mouse.transform.position) < 1)
+
+        if (Vector3.Distance(Mouse.cheese.transform.position, Mouse.transform.position) < 3)
         {
             Mouse.mouseAnimator.SetBool("EatCheese", true);
             timer += counter * Time.deltaTime;

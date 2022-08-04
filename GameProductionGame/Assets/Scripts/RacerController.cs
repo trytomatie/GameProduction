@@ -1,16 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class RacerController : State
 {
     [Header("Speed stats")]
-    public float walkSpeed = 6;
-    public float runSpeed = 12;
+    public const float walkSpeed = 2;
+    public const float  runSpeed = 6;
     public float backwardsSpeed = 6;
     public float acceleration = 7;
     public float turnspeed = 15;
-    public float sneakSpeed = 2f;
+    public const float sneakSpeed = 2f;
 
     [Header("Physics")]
     public float gravity = -9.81f;
@@ -24,6 +25,8 @@ public class RacerController : State
 
     [Header("Sneaking")]
     public bool isSneaking = false;
+    public int chaseIndex=0;
+    public float noise = 0;
 
     private bool isJumping = false;
     
@@ -43,6 +46,7 @@ public class RacerController : State
     private CharacterController cc;
     private Animator anim;
     private Camera mainCamera;
+    private Volume chaseVolume;
 
 
 
@@ -55,6 +59,7 @@ public class RacerController : State
         cc = GetComponent<CharacterController>();
         mainCamera = Camera.main;
         Cursor.lockState = CursorLockMode.Locked;
+        chaseVolume = GameObject.Find("ChaseVolume").GetComponent<Volume>();
     }
 
     // Update is called once per frame
@@ -74,6 +79,7 @@ public class RacerController : State
 
     }
 
+
     private void LateUpdate()
     {
         if(!(ySpeed - cc.velocity.y > -10))
@@ -84,6 +90,18 @@ public class RacerController : State
         {
             slideMovement = Vector3.zero;
         }
+
+        if (chaseIndex > 0)
+        {
+            chaseVolume.weight = 1;
+            
+        }
+        else
+        {
+            chaseVolume.weight = 0;
+        }
+
+        HandleNoise();
     }
 
     private void Animations()
@@ -91,6 +109,39 @@ public class RacerController : State
         anim.SetFloat("speed", movementSpeed);
         anim.SetFloat("ySpeed", ySpeed / 12);
         anim.SetBool("isSneaking", isSneaking);
+    }
+
+    private void HandleNoise()
+    {
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
+        {
+            switch (movementSpeed)
+            {
+                case runSpeed:
+
+                    noise = 3;
+
+                break;
+                case walkSpeed:
+
+                    noise = 1;
+
+                break;
+                case 0:
+
+                    noise = 0;
+
+                break;
+            }
+        }
+        if (anim.GetCurrentAnimatorStateInfo(0).IsName("Sneaking"))
+        {
+            noise = 0;
+        }
+        if (!anim.GetCurrentAnimatorStateInfo(0).IsName("Sneaking") && !anim.GetCurrentAnimatorStateInfo(0).IsName("Movement"))
+        {
+            noise = 0;
+        }
     }
 
     private void Rotation()

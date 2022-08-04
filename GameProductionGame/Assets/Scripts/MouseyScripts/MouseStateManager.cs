@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Rendering;
 
 /// <summary>
 /// Markus Schwalb
@@ -10,14 +11,18 @@ using UnityEngine.AI;
 
 public class MouseStateManager : MonoBehaviour
 {
-    
+    //public Volume chaseVolume;
     public MousePatrolState mousePatrol = new MousePatrolState();
     public MouseIdleState mouseIdle = new MouseIdleState();
     public MouseAnimationState mouseAni = new MouseAnimationState();
     public MouseyCheckForStuff checkForStuff = new MouseyCheckForStuff();
     public MouseyChase mChase = new MouseyChase();
     public MouseCheeseState mouseCheese = new MouseCheeseState();
+    public MouseySearchState mouseySearch = new MouseySearchState();
+
     public MouseBaseState currentState;
+    public AudioSource mouth;
+    public AudioClip[] voiceLines;
 
     [HideInInspector]
     public Animator mouseAnimator;
@@ -28,6 +33,8 @@ public class MouseStateManager : MonoBehaviour
     public GameObject player;
     [HideInInspector]
     public GameObject cheese;
+
+    public GameObject lookAt;
 
     public Transform[] patrolPoints;
     public int nextPatrolPoint;
@@ -53,6 +60,9 @@ public class MouseStateManager : MonoBehaviour
     {
         currentState = mouseIdle;
         currentState.EnterMouseState(this);
+        
+
+        //chaseVolume = GameObject.Find("ChaseVolume").GetComponent<Volume>();
 
         navMeshMouseAgent = GetComponent<NavMeshAgent>();
         mouseAnimator = GetComponent<Animator>();
@@ -61,7 +71,8 @@ public class MouseStateManager : MonoBehaviour
         nextPatrolPoint = 0;
         forward = true;
         inChase = false;
-       // distracted = false;
+        // distracted = false;
+        //SwitchMouseState(mouseySearch);
     }
 
     // Update is called once per frame
@@ -89,8 +100,19 @@ public class MouseStateManager : MonoBehaviour
         currentState.EnterMouseState(this);
     }
 
+    public void PlayVoiceLines(AudioClip line)
+    {
+        if (!mouth.isPlaying)
+        {
+            mouth.clip = line;
+            mouth.Play();
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         checkForStuff.MouseTrigger(other, this);
     }
+
+    
 }
