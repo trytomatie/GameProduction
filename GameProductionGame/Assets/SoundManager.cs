@@ -36,4 +36,9 @@ public class SoundManager : MonoBehaviour
             freeSource.pitch = 1;
         }
     }
+
+    public void Exit()
+    {
+        Application.Quit();
+    }
 }

@@ -8,4 +8,13 @@ EditorBuildSettings:
   - enabled: 0
     path: 
     guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Scenes/Menu.unity
+    guid: 84665bb8f7d94624b9a5d6ca6ca08800
+  - enabled: 1
+    path: Assets/Scenes/Game2.unity
+    guid: 12e37bf2f14f4a840ad0cc320137469e
+  - enabled: 1
+    path: Assets/Scenes/MouseyWins.unity
+    guid: 57a1dbe196139f8499faa9cc75f4ca9e
   m_configObjects: {}

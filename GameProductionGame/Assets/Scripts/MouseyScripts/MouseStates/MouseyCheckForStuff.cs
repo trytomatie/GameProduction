@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// Markus Schwalb
@@ -117,6 +118,7 @@ public class MouseyCheckForStuff : MouseBaseState
         distance = Vector3.Distance(Mouse.player.transform.position, Mouse.transform.position);
         if (Mouse.currentState == Mouse.mChase && distance < 0.2f)
         {
+            SceneManager.LoadScene(2);
             Debug.Log("verloren");
         }
     }
