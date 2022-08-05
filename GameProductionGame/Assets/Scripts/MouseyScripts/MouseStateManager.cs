@@ -57,6 +57,7 @@ public class MouseStateManager : MonoBehaviour
     public float eyeHeight;
     public float mouseyViewingDistance;
     public float catchDistance = 0.7f;
+    public float viewHeight = 1;
 
 
 

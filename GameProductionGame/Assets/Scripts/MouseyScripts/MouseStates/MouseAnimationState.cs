@@ -16,7 +16,7 @@ public class MouseAnimationState : MouseBaseState
     /// <param name="Mouse"></param>
     public override void EnterMouseState(MouseStateManager Mouse)
     {
-        Mouse.lookAt.transform.position = Mouse.transform.forward * 5 + new Vector3(0,2,0);
+        Mouse.lookAt.transform.position = Mouse.transform.forward * 5 + new Vector3(0,Mouse.viewHeight,0);
     }
 
     /// <summary>
@@ -42,11 +42,11 @@ public class MouseAnimationState : MouseBaseState
     {
         if (Mouse.currentState == Mouse.mChase)
         {
-            Mouse.lookAt.transform.position = Vector3.Lerp(Mouse.lookAt.transform.position, Mouse.player.transform.position+ new Vector3(0,0f,0), Time.deltaTime);
+            Mouse.lookAt.transform.position = Vector3.Lerp(Mouse.lookAt.transform.position, Mouse.player.transform.position+ new Vector3(0,0f,0), Time.deltaTime*2);
         } 
         else
         {
-            Mouse.lookAt.transform.position = Vector3.Lerp(Mouse.lookAt.transform.position, Mouse.transform.position + Mouse.transform.forward * 5 + new Vector3(0, 1, 0), Time.deltaTime);
+            Mouse.lookAt.transform.position = Vector3.Lerp(Mouse.lookAt.transform.position, Mouse.transform.position + Mouse.transform.forward * 5 + new Vector3(0, Mouse.viewHeight, 0), Time.deltaTime*2);
         }
     }
 

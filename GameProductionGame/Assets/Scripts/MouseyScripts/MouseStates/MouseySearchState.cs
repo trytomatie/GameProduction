@@ -27,6 +27,10 @@ public class MouseySearchState : MouseBaseState
         //Set Speed
         Mouse.navMeshMouseAgent.speed = 2.5f;
 
+        //Set Animation
+        Mouse.mouseAnimator.SetBool("isSneaking", true);
+        Mouse.viewHeight = -1;
+
         //initialize lookpoints
         startPoint = Mouse.transform.position;
         nextPoint = 0;
@@ -66,7 +70,9 @@ public class MouseySearchState : MouseBaseState
 
     public override void ExitMouseState(MouseStateManager Mouse)
     {
-        
+        //exit sneaking Movement
+        Mouse.mouseAnimator.SetBool("isSneaking", false);
+        Mouse.viewHeight = 1;
     }
 
 }
