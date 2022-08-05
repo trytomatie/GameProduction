@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 7084199382831203924}
   - component: {fileID: 7084199382831203925}
   - component: {fileID: 7084199382831203913}
+  - component: {fileID: 8495381047487281771}
   m_Layer: 0
   m_Name: Scanner
   m_TagString: Interactable
@@ -1053,6 +1054,21 @@ MonoBehaviour:
   ikTarget: {fileID: 7084199383396189144}
   reticle: {fileID: 983995787044393173, guid: 57dff709d0f753440b24fd459e59a25c, type: 3}
   anim: {fileID: 0}
+--- !u!114 &8495381047487281771
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7084199382831203927}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: edb2dfc5421565c46a3e38a69c200043, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  clips:
+  - {fileID: 8300000, guid: ccf300e40d754a84588f796704e289cb, type: 3}
+  - {fileID: 8300000, guid: fe8953a13891a0148a52b6e568770e99, type: 3}
 --- !u!1 &7084199383396189145
 GameObject:
   m_ObjectHideFlags: 0

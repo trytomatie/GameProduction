@@ -15,7 +15,7 @@ public class MouseyFootsteps : MonoBehaviour
         audioSource.clip = footsteps;
     }
 
-    public void Step()
+    public void Step(AnimationEvent ae)
     {
         audioSource.PlayOneShot(footsteps);
     }

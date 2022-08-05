@@ -11,7 +11,7 @@ public class MouseyChase : MouseBaseState
         Mouse.navMeshMouseAgent.SetDestination(Mouse.player.transform.position);
 
         Mouse.PlayVoiceLines(Mouse.voiceLines[1]);
-        Mouse.player.GetComponent<RacerController>().chaseIndex++;
+        Mouse.player.GetComponent<PlayerController>().chaseIndex++;
 
 
 
@@ -27,6 +27,6 @@ public class MouseyChase : MouseBaseState
 
     public override void ExitMouseState(MouseStateManager Mouse)
     {
-        Mouse.player.GetComponent<RacerController>().chaseIndex--;
+        Mouse.player.GetComponent<PlayerController>().chaseIndex--;
     }
 }

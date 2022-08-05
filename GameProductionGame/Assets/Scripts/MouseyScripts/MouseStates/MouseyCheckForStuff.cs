@@ -126,7 +126,7 @@ public class MouseyCheckForStuff : MouseBaseState
     private void CheckForNoise(MouseStateManager Mouse)
     {
         
-        RacerController player = Mouse.player.GetComponent<RacerController>();
+        PlayerController player = Mouse.player.GetComponent<PlayerController>();
         if (player.noise > distance)
         {
             Mouse.SwitchMouseState(Mouse.mChase);
