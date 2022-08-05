@@ -12,6 +12,8 @@ using UnityEngine.Rendering;
 public class MouseStateManager : MonoBehaviour
 {
     //public Volume chaseVolume;
+
+    //States
     public MousePatrolState mousePatrol = new MousePatrolState();
     public MouseIdleState mouseIdle = new MouseIdleState();
     public MouseAnimationState mouseAni = new MouseAnimationState();
@@ -21,35 +23,40 @@ public class MouseStateManager : MonoBehaviour
     public MouseySearchState mouseySearch = new MouseySearchState();
 
     public MouseBaseState currentState;
+
+
     public AudioSource mouth;
     public AudioClip[] voiceLines;
 
+    //Components
     [HideInInspector]
     public Animator mouseAnimator;
     [HideInInspector]
     public NavMeshAgent navMeshMouseAgent;
 
+    //Referenced Objects
     [HideInInspector]
     public GameObject player;
     [HideInInspector]
     public GameObject cheese;
-
     public GameObject lookAt;
 
     public Transform[] patrolPoints;
     public int nextPatrolPoint;
     
+    //Bools to play with
     [HideInInspector]
     public bool forward;
     [HideInInspector]
     public bool inChase;
     //public bool distracted;
 
+    //Parameters
     public LayerMask mouseRayCastLayers;
     public float mouseyFieldOfView;
     public float eyeHeight;
     public float mouseyViewingDistance;
-
+    public float catchDistance = 0.7f;
 
 
 
@@ -64,6 +71,7 @@ public class MouseStateManager : MonoBehaviour
 
         //chaseVolume = GameObject.Find("ChaseVolume").GetComponent<Volume>();
 
+        //initialize Parameter 
         navMeshMouseAgent = GetComponent<NavMeshAgent>();
         mouseAnimator = GetComponent<Animator>();
         player = GameObject.Find("Clyde The Kid");
@@ -100,6 +108,11 @@ public class MouseStateManager : MonoBehaviour
         currentState.EnterMouseState(this);
     }
 
+    /// <summary>
+    /// Play Voice Lines
+    /// </summary>
+    /// <param name="line"></param>
+
     public void PlayVoiceLines(AudioClip line)
     {
         if (!mouth.isPlaying)
@@ -109,6 +122,10 @@ public class MouseStateManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// trigger on trigger enter (use case is for cheese)
+    /// </summary>
+    /// <param name="other"></param>
     private void OnTriggerEnter(Collider other)
     {
         checkForStuff.MouseTrigger(other, this);

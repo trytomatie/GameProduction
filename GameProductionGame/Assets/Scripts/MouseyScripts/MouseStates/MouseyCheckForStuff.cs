@@ -116,7 +116,7 @@ public class MouseyCheckForStuff : MouseBaseState
     private void calculateDistance(MouseStateManager Mouse)
     {
         distance = Vector3.Distance(Mouse.player.transform.position, Mouse.transform.position);
-        if (Mouse.currentState == Mouse.mChase && distance < 0.2f)
+        if (Mouse.currentState == Mouse.mChase && distance < Mouse.catchDistance)
         {
             SceneManager.LoadScene(2);
             Debug.Log("verloren");
