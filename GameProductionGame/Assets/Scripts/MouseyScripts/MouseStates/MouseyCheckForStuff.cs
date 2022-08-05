@@ -17,7 +17,12 @@ public class MouseyCheckForStuff : MouseBaseState
 
     }
 
-
+    /// <summary>
+    /// Checkdistance between Mousey and Player
+    /// Check if Mousey sees the player
+    /// Check if the player is to loud
+    /// </summary>
+    /// <param name="Mouse"></param>
     public override void UpdateMouseState(MouseStateManager Mouse)
     {
         calculateDistance(Mouse);
@@ -41,28 +46,47 @@ public class MouseyCheckForStuff : MouseBaseState
 
     }
 
+    /// <summary>
+    /// Check if the player is in Mouseys fieldOf View if so check if he gets hit by the raycast (player hit by raycast)
+    /// </summary>
+    /// <param name="player"></param>
+    /// <param name="Mouse"></param>
+    /// <returns></returns>
     private bool CheckPlayerInView(GameObject player, MouseStateManager Mouse)
     {
-        Debug.Log("CheckPlayerInView");
+        //Debug.Log("CheckPlayerInView");
+        //create a Vector 3 as an direction vector between Mousey and Player
         Vector3 vectorBetween = player.transform.position - Mouse.transform.position;
+        //calculate the angle
         float angle = Vector3.Angle(vectorBetween, Mouse.transform.forward);
 
+        //Check if the player is in Mouseys FieldOfView
         if (Mouse.mouseyFieldOfView > angle)
         {
             //Debug.Log("CheckPlayerInViewTrue");
+
+            //Check if player can be seen
             if (playerHitByRaycast(Mouse, vectorBetween))
             {
                 return true;
             }
 
         }
-        Debug.Log("CheckPlayerInViewFalse");
+        //Debug.Log("CheckPlayerInViewFalse");
         return false;
     }
 
+    /// <summary>
+    /// Check if player is hit by raycast
+    /// </summary>
+    /// <param name="Mouse"></param>
+    /// <param name="vectorToPlayer"></param>
+    /// <returns></returns>
     private bool playerHitByRaycast(MouseStateManager Mouse, Vector3 vectorToPlayer)
     {
-        Debug.Log("playerHitbyRaycasttest");
+        //Debug.Log("playerHitbyRaycasttest");
+
+        //calculate Raycast origin 
         Vector3 rayCastOrigin = new Vector3(Mouse.transform.position.x, Mouse.transform.position.y + Mouse.eyeHeight, Mouse.transform.position.z);
         
         RaycastHit hit;
@@ -74,6 +98,8 @@ public class MouseyCheckForStuff : MouseBaseState
             {
                 //Debug.Log("HitSomething");
                 GameObject hitObject = hit.transform.gameObject;
+
+                //check if the hit is the player
                 if (hitObject.CompareTag("Player"))
                 {
                     //Debug.Log("Hitplayer");
@@ -83,7 +109,7 @@ public class MouseyCheckForStuff : MouseBaseState
                 
             }
         }
-        Debug.DrawRay(rayCastOrigin, (vectorToPlayer.normalized * Mouse.mouseyViewingDistance), Color.red);
+        //Debug.DrawRay(rayCastOrigin, (vectorToPlayer.normalized * Mouse.mouseyViewingDistance), Color.red);
 
         return false;
         
@@ -103,7 +129,7 @@ public class MouseyCheckForStuff : MouseBaseState
             {
                 GameObject item = other.gameObject;
                 Interactable_Item itemScript = item.GetComponent<Interactable_Item>();
-                if (itemScript.itemType == Interactable_Item.ItemType.Cheese)
+                if (itemScript.itemType == Interactable_Item.ItemType.Cheese && Mouse.cheese==null)
                 {
                     Mouse.cheese = item;
                     Mouse.SwitchMouseState(Mouse.mouseCheese);
@@ -113,6 +139,10 @@ public class MouseyCheckForStuff : MouseBaseState
         
     }
 
+    /// <summary>
+    /// get distance between player and mousey and if the distance is below Catch Distance and mousey is chasing you then you lose
+    /// </summary>
+    /// <param name="Mouse"></param>
     private void calculateDistance(MouseStateManager Mouse)
     {
         distance = Vector3.Distance(Mouse.player.transform.position, Mouse.transform.position);
@@ -123,11 +153,15 @@ public class MouseyCheckForStuff : MouseBaseState
         }
     }
 
+    /// <summary>
+    /// Check if the player is close enough to hear him if so Chase him unless you eat cheese
+    /// </summary>
+    /// <param name="Mouse"></param>
     private void CheckForNoise(MouseStateManager Mouse)
     {
         
         PlayerController player = Mouse.player.GetComponent<PlayerController>();
-        if (player.noise > distance)
+        if (player.noise > distance && Mouse.currentState != Mouse.mouseCheese)
         {
             Mouse.SwitchMouseState(Mouse.mChase);
         }

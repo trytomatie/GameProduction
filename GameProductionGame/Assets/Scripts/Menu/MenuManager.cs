@@ -4,12 +4,19 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 /// <summary>
+/// Markus Schwalb
 /// script to handle Menu Buttons 
 /// </summary>
 public class MenuManager : MonoBehaviour
 {
+    private void Start()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+    }
+
     /// <summary>
-    /// Restarts/loads the Game Level
+    /// Restarts/loads the Game Level i (buildmanager index)
     /// </summary>
     public void LoadLevel(int i)
     {

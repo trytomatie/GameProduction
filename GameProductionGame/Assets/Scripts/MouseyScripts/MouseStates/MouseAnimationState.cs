@@ -10,11 +10,20 @@ using UnityEngine;
 
 public class MouseAnimationState : MouseBaseState
 {
+    /// <summary>
+    /// set the Current look at location
+    /// </summary>
+    /// <param name="Mouse"></param>
     public override void EnterMouseState(MouseStateManager Mouse)
     {
         Mouse.lookAt.transform.position = Mouse.transform.forward * 5 + new Vector3(0,2,0);
     }
 
+    /// <summary>
+    /// update the walk animation with the current speed Value
+    /// and update look at location
+    /// </summary>
+    /// <param name="Mouse"></param>
     public override void UpdateMouseState(MouseStateManager Mouse)
     {
         float speed = Mouse.navMeshMouseAgent.velocity.magnitude;
@@ -25,6 +34,10 @@ public class MouseAnimationState : MouseBaseState
         
     }
 
+    /// <summary>
+    /// update the Lookdirection of Mousey if mousey is chasing look at player otherwise look to the front
+    /// </summary>
+    /// <param name="Mouse"></param>
     private void updateLookAt(MouseStateManager Mouse)
     {
         if (Mouse.currentState == Mouse.mChase)

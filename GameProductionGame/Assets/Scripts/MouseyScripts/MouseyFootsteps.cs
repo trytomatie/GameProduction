@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Schwalb Markus
+/// Play Footsteps
+/// </summary>
 public class MouseyFootsteps : MonoBehaviour
 {
     public GameObject audioSourceObj;
@@ -17,7 +21,11 @@ public class MouseyFootsteps : MonoBehaviour
 
     public void Step(AnimationEvent ae)
     {
-        audioSource.PlayOneShot(footsteps);
+        if (ae.animatorClipInfo.weight > 0.5)
+        {
+            
+            audioSource.PlayOneShot(footsteps);
+        }
     }
 
 }
