@@ -1,5 +1,5 @@
 sceneSetups:
-- path: Assets/Scenes/MouseyWins.unity
+- path: Assets/Scenes/PlayerWins.unity
   isLoaded: 1
   isActive: 1
   isSubScene: 0
